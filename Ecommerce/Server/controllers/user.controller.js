@@ -32,8 +32,22 @@ const userController = {
     try {
       const existingUser = await User.findOne({ email });
       if (!existingUser) {
-        return res.status(400).semd({ message: "User not found" });
+        return res.status(400).send({ message: "User not found" });
       }
+
+      const isPasswordCorrect = await bcrypt.compare(
+        password,
+        existingUser.password
+      );
+      if (!isPasswordCorrect) {
+        return res.status(400).send({ message: "Invalid Password Input!" });
+      }
+
+      const token = jwt.sign({ id: existingUser._id }, SECRET_KEY, {
+        expiresIn: "1h",
+      });
+
+      res.status(200).send({ message: "Login successful", token });
     } catch (error) {
       return res.status(500).send({ message: "Server Error" });
     }
