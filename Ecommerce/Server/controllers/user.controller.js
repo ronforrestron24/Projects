@@ -30,6 +30,10 @@ const userController = {
     const { email, password } = req.body;
 
     try {
+      const existingUser = await User.findOne({ email });
+      if (!existingUser) {
+        return res.status(400).semd({ message: "User not found" });
+      }
     } catch (error) {
       return res.status(500).send({ message: "Server Error" });
     }
