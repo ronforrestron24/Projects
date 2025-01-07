@@ -16,9 +16,22 @@ const userController = {
       const newUser = new User({ name, email, password: hashedPassword });
       await newUser.save();
 
-      res.status(201).send({ message: "User registered successfully" });
+      const token = jwt.sign({ id: newUser._id }, SECRET_KEY, {
+        expiresIn: "1h",
+      });
+
+      res.status(201).send({ message: "User registered successfully", token });
     } catch (error) {
       res.status(500).send({ message: "Server Error" });
+    }
+  },
+
+  loginUser: async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+    } catch (error) {
+      return res.status(500).send({ message: "Server Error" });
     }
   },
 };
