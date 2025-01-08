@@ -2,13 +2,15 @@ import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+const SECRET_KEY = process.env.SECRET_KEY; // Use environment variable
+
 const userController = {
   register: async (req, res) => {
-    const { name, email, password } = req.body; //extract data from body
+    const { name, email, password } = req.body;
 
     try {
       const existingUser = await User.findOne({ email });
-      if (!existingUser) {
+      if (existingUser) {
         return res.status(400).send({ message: "User already exists!" });
       }
 
@@ -32,7 +34,7 @@ const userController = {
     try {
       const existingUser = await User.findOne({ email });
       if (!existingUser) {
-        return res.status(400).send({ message: "User not found" });
+        return res.status(400).send({ message: "User not found!" });
       }
 
       const isPasswordCorrect = await bcrypt.compare(
@@ -40,7 +42,7 @@ const userController = {
         existingUser.password
       );
       if (!isPasswordCorrect) {
-        return res.status(400).send({ message: "Invalid Password Input!" });
+        return res.status(400).send({ message: "Invalid credentials!" });
       }
 
       const token = jwt.sign({ id: existingUser._id }, SECRET_KEY, {
