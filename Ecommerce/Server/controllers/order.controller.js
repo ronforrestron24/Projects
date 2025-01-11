@@ -3,7 +3,7 @@ import Order from "../models/order.model.js";
 const orderController = {
   createOrder: async (req, res) => {
     try {
-      const { userId, items, totalPrice } = req.body;
+      const { user, items, totalPrice } = req.body;
 
       const newOrder = new Order({
         user,
