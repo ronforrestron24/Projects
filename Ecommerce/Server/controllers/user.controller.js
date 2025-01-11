@@ -18,12 +18,13 @@ const userController = {
       const newUser = new User({ name, email, password: hashedPassword });
       await newUser.save();
 
-      const token = jwt.sign({ id: newUser._id }, SECRET_KEY, {
+      const token = jwt.sign({ id: newUser._id }, process.env.SECRET_KEY, {
         expiresIn: "1h",
       });
 
       res.status(201).send({ message: "User registered successfully", token });
     } catch (error) {
+      console.error("Error during registration", error);
       res.status(500).send({ message: "Server Error" });
     }
   },
