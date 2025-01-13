@@ -2,7 +2,7 @@ import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const SECRET_KEY = process.env.SECRET_KEY; // Use environment variable
+const SECRET_KEY = process.env.SECRET_KEY;
 
 const userController = {
   register: async (req, res) => {
