@@ -35,7 +35,7 @@ const userController = {
   // READ - Get all users (admin only)
   getAllUsers: async (req, res) => {
     try {
-      const users = await User.find().select("-password"); // Exclude password
+      const users = await User.find().select("-password");
       res.status(200).send(users);
     } catch (error) {
       console.error("Error fetching users:", error);
