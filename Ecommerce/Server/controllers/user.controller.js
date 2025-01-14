@@ -11,7 +11,7 @@ const userController = {
       // Check if user already exists
       const existingUser = await User.findOne({ email });
       if (existingUser) {
-        return res.status(400).json({ message: "User already exists" });
+        return res.status(400).send({ message: "User already exists" });
       }
 
       // Hash password
@@ -25,10 +25,10 @@ const userController = {
       });
 
       await newUser.save();
-      res.status(201).json({ message: "User created successfully" });
+      res.status(201).send({ message: "User created successfully" });
     } catch (error) {
       console.error("Registration error:", error);
-      res.status(500).json({ message: "Server Error" });
+      res.status(500).send({ message: "Server Error" });
     }
   },
 
@@ -36,10 +36,10 @@ const userController = {
   getAllUsers: async (req, res) => {
     try {
       const users = await User.find().select("-password"); // Exclude password
-      res.status(200).json(users);
+      res.status(200).send(users);
     } catch (error) {
       console.error("Error fetching users:", error);
-      res.status(500).json({ message: "Server Error" });
+      res.status(500).send({ message: "Server Error" });
     }
   },
 
@@ -48,12 +48,12 @@ const userController = {
     try {
       const user = await User.findById(req.params.id).select("-password");
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).send({ message: "User not found" });
       }
-      res.status(200).json(user);
+      res.status(200).send(user);
     } catch (error) {
       console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Server Error" });
+      res.status(500).send({ message: "Server Error" });
     }
   },
 
@@ -74,13 +74,13 @@ const userController = {
       }).select("-password");
 
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).send({ message: "User not found" });
       }
 
-      res.status(200).json(user);
+      res.status(200).send(user);
     } catch (error) {
       console.error("Error updating user:", error);
-      res.status(500).json({ message: "Server Error" });
+      res.status(500).send({ message: "Server Error" });
     }
   },
 
@@ -89,12 +89,12 @@ const userController = {
     try {
       const user = await User.findByIdAndDelete(req.params.id);
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).send({ message: "User not found" });
       }
-      res.status(200).json({ message: "User deleted successfully" });
+      res.status(200).send({ message: "User deleted successfully" });
     } catch (error) {
       console.error("Error deleting user:", error);
-      res.status(500).json({ message: "Server Error" });
+      res.status(500).send({ message: "Server Error" });
     }
   },
 
@@ -106,13 +106,13 @@ const userController = {
       // Find user
       const user = await User.findOne({ email });
       if (!user) {
-        return res.status(400).json({ message: "Invalid credentials" });
+        return res.status(400).send({ message: "Invalid credentials" });
       }
 
       // Check password
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res.status(400).json({ message: "Invalid credentials" });
+        return res.status(400).send({ message: "Invalid credentials" });
       }
 
       // Generate JWT
@@ -120,7 +120,7 @@ const userController = {
         expiresIn: "1d",
       });
 
-      res.status(200).json({
+      res.status(200).send({
         token,
         user: {
           id: user._id,
@@ -130,7 +130,7 @@ const userController = {
       });
     } catch (error) {
       console.error("Login error:", error);
-      res.status(500).json({ message: "Server Error" });
+      res.status(500).send({ message: "Server Error" });
     }
   },
 
@@ -139,10 +139,10 @@ const userController = {
     try {
       // Note: In JWT, logout is typically handled client-side
       // by removing the token. This is just a server acknowledgment.
-      res.status(200).json({ message: "Logged out successfully" });
+      res.status(200).send({ message: "Logged out successfully" });
     } catch (error) {
       console.error("Logout error:", error);
-      res.status(500).json({ message: "Server Error" });
+      res.status(500).send({ message: "Server Error" });
     }
   },
 };
