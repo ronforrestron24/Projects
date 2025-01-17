@@ -1,2 +1,2 @@
-import { Express } from "express";
-import Product from "../models/product.model";
+import { Router } from "express";
+import Product from "../controller/productController";
