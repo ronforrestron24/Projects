@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import Product from "../models/product.model";
 
+interface ProductParams {
+  id: string;
+}
+
 const productController = {
   getAllProducts: async (req: Request, res: Response) => {
     try {
@@ -26,13 +30,14 @@ const productController = {
 
       await newProduct.save();
       res
-        .status(200)
+        .status(201)
         .send({ message: "Product successfully created", product: newProduct });
     } catch (error) {
+      console.log(error);
       res.status(500).send({ message: "Failed to connect to server", error });
     }
   },
-  getProductById: async (req: Request, res: Response) => {
+  getProductById: async (req: Request<ProductParams>, res: Response) => {
     try {
       const product = await Product.findById(req.params.id);
       if (!product) {
@@ -43,9 +48,13 @@ const productController = {
       res.status(500).send({ message: "Failed to connect to server", error });
     }
   },
-  updateProduct: async (req: Request, res: Response) => {
+  updateProduct: async (req: Request<ProductParams>, res: Response) => {
     try {
-      const { name, price, description }:= req.body;
+      const {
+        name,
+        price,
+        description,
+      }: { name: string; price: number; description: string } = req.body;
 
       const updatedProduct = await Product.findByIdAndUpdate(
         req.params.id,
@@ -65,7 +74,7 @@ const productController = {
       res.status(500).send({ message: "Failed to connect to server", error });
     }
   },
-  deleteProduct: async (req: Request, res: Response) => {
+  deleteProduct: async (req: Request<ProductParams>, res: Response) => {
     try {
       const deletedProduct = await Product.findByIdAndDelete(req.params.id);
 
