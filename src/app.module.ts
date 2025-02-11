@@ -9,12 +9,18 @@ import { PosService } from './pos/pos.service';
 import { PosModule } from './pos/pos.module';
 import { ClientResolver } from './client/client.resolver';
 import { ClientModule } from './client/client.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
+    }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
