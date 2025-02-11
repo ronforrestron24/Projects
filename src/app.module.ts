@@ -4,6 +4,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { configuration } from './config/configuration';
+import { SapModule } from './sap/sap.module';
+import { PosService } from './pos/pos.service';
+import { PosModule } from './pos/pos.module';
+import { ClientResolver } from './client/client.resolver';
+import { ClientModule } from './client/client.module';
 
 @Module({
   imports: [
@@ -18,8 +23,11 @@ import { configuration } from './config/configuration';
       }),
       inject: [ConfigService],
     }),
+    SapModule,
+    PosModule,
+    ClientModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PosService, ClientResolver],
 })
 export class AppModule {}
