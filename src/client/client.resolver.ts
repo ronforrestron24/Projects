@@ -1,4 +1,4 @@
-import { Resolver, Query, Args } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { ClientService } from './client.service';
 import { Client } from '../modules/clients/client.model';
 
@@ -14,5 +14,25 @@ export class ClientResolver {
   @Query(() => [Client])
   async getClients() {
     return this.clientService.getClients();
+  }
+
+  @Mutation(() => Client)
+  async createClient(@Args('client') client: Client) {
+    return this.clientService.createClient(client);
+  }
+
+  @Mutation(() => Client)
+  async updateClient(@Args('client') client: Client) {
+    return this.clientService.updateClient(client);
+  }
+
+  @Mutation(() => Client)
+  async deleteClient(@Args('clientId') clientId: string) {
+    return this.clientService.deleteClient(clientId);
+  }
+
+  @Mutation(() => Client)
+  async getClientById(@Args('clientId') clientId: string) {
+    return this.clientService.getClientById(clientId);
   }
 }

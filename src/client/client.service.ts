@@ -23,4 +23,26 @@ export class ClientService {
   async getClients() {
     return this.clientModel.find().exec();
   }
+
+  async createClient(client: Client) {
+    return this.clientModel.create(client);
+  }
+
+  async updateClient(client: Client) {
+    return this.clientModel.findByIdAndUpdate(client._id, client, {
+      new: true,
+    });
+  }
+
+  async deleteClient(clientId: string) {
+    return this.clientModel.findByIdAndDelete(clientId);
+  }
+
+  async getClientById(clientId: string) {
+    return this.clientModel.findById(clientId);
+  }
+
+  async getClientByClientId(clientId: string) {
+    return this.clientModel.findOne({ clientId });
+  }
 }

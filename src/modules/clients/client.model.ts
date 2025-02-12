@@ -3,7 +3,7 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Document } from 'mongoose';
 
 @Schema()
-@ObjectType() // This makes it both a MongoDB schema and a GraphQL model
+@ObjectType()
 export class Client extends Document {
   @Field(() => ID)
   _id: string;
