@@ -30,6 +30,7 @@
     "@nestjs/mongoose": "^11.0.1",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^10.0.0",
+    "@sap-cloud-sdk/generator": "^3.26.0",
     "apollo-server-express": "^3.13.0",
     "axios": "^1.7.9",
     "cross-env": "^7.0.3",

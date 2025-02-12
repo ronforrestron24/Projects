@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Client } from '../modules/clients/client.model';
+import { Client, ClientInput } from '../modules/clients/client.model';
 import { SapService } from '../sap/sap.service';
 
 @Injectable()
@@ -24,7 +24,7 @@ export class ClientService {
     return this.clientModel.find().exec();
   }
 
-  async createClient(client: Client) {
+  async createClient(client: ClientInput) {
     return this.clientModel.create(client);
   }
 

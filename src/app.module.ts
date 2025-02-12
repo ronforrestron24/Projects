@@ -11,6 +11,9 @@ import { ClientModule } from './client/client.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { DatabaseModule } from './database/database.module';
+import { CostCenterService } from './cost-center/cost-center.service';
+import { CostCenterController } from './cost-center/cost-center.controller';
+import { CostCenterModule } from './cost-center/cost-center.module';
 
 @Module({
   imports: [
@@ -33,8 +36,9 @@ import { DatabaseModule } from './database/database.module';
     PosModule,
     ClientModule,
     DatabaseModule,
+    CostCenterModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, PosService],
+  controllers: [AppController, CostCenterController],
+  providers: [AppService, PosService, CostCenterService],
 })
 export class AppModule {}

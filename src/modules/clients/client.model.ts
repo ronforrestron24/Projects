@@ -1,10 +1,10 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID, InputType } from '@nestjs/graphql';
 import { Document } from 'mongoose';
 
 @Schema()
 @ObjectType()
-export class Client extends Document {
+export class Client {
   @Field(() => ID)
   _id: string;
 
@@ -18,7 +18,23 @@ export class Client extends Document {
 
   @Prop()
   @Field(() => Number, { nullable: true })
-  balance: number;
+  balance?: number;
 }
 
+@InputType()
+export class ClientInput {
+  @Field(() => ID, { nullable: true })
+  _id: string;
+
+  @Field(() => String)
+  clientId: string;
+
+  @Field(() => String)
+  name: string;
+
+  @Field(() => Number, { nullable: true })
+  balance?: number;
+}
+
+export type ClientDocument = Client & Document;
 export const ClientSchema = SchemaFactory.createForClass(Client);
