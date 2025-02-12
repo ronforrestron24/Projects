@@ -7,10 +7,10 @@ import { configuration } from './config/configuration';
 import { SapModule } from './sap/sap.module';
 import { PosService } from './pos/pos.service';
 import { PosModule } from './pos/pos.module';
-import { ClientResolver } from './client/client.resolver';
 import { ClientModule } from './client/client.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -32,8 +32,9 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
     SapModule,
     PosModule,
     ClientModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PosService, ClientResolver],
+  providers: [AppService, PosService],
 })
 export class AppModule {}
