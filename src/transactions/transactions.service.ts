@@ -1,28 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import {
-  Transaction,
-  TransactionDocument,
-} from '../modules/transaction/transaction.schema';
+import { Transaction } from './schema/transaction.schema';
+import { Client } from 'lago-javascript-client';
 
 @Injectable()
 export class TransactionsService {
+  private lagoClient = new Lago({ apiKey: process.env.LAGO_API_KEY });
+
   constructor(
-    @InjectModel(Transaction.name)
-    private transactionModel: Model<TransactionDocument>,
+    @InjectModel(Transaction.name) private transactionModel: Model<Transaction>,
   ) {}
 
-  async createTransaction(transaction: Transaction): Promise<Transaction> {
-    const newTransaction = new this.transactionModel(transaction);
-    return newTransaction.save();
+  async logTransaction(transactionDto: any) {
+    const newTransaction = new this.transactionModel(transactionDto);
+    await newTransaction.save();
+
+    return this.lagoClient.transactions.createTransaction({
+      transaction: transactionDto,
+    });
   }
 
-  async getTransactions(): Promise<Transaction[]> {
-    return this.transactionModel.find().exec();
-  }
-
-  async getTransactionById(id: string): Promise<Transaction> {
-    return this.transactionModel.findById(id).exec();
+  async getCustomerTotalSales(customerId: string) {
+    const transactions = await this.transactionModel.find({
+      external_customer_id: customerId,
+    });
+    return transactions.reduce((sum, tx) => sum + tx.amount_cents, 0) / 100;
   }
 }
