@@ -1,22 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { TransactionsService } from '../transactions/transactions.service';
-import { Client } from 'lago-javascript-client';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { BillableMetric } from './schema/billing.schema';
 
 @Injectable()
-export class BillingService {
-  private lagoClient = new Client(process.env.LAGO_API_KEY);
+export class BillableMetricService {
+  constructor(
+    @InjectModel(BillableMetric.name)
+    private billableMetricModel: Model<BillableMetric>,
+  ) {}
 
-  constructor(private transactionsService: TransactionsService) {}
-
-  async checkAndInvoice(customerId: string) {
-    const totalSales =
-      await this.transactionsService.getCustomerTotalSales(customerId);
-
-    if (totalSales >= 500) {
-      return this.lagoClient.invoices.createInvoice({
-        invoice: { external_customer_id: customerId },
-      });
-    }
-    return { message: 'No invoice needed yet' };
+  async createBillableMetric(): Promise<BillableMetric> {
+    const newMetric = new this.billableMetricModel({
+      name: 'Storage',
+      code: 'storage',
+      aggregation_type: 'sum_agg',
+      recurring: false,
+      field_name: 'gb',
+      weighted_interval: 'seconds',
+      filters: [
+        {
+          key: 'region',
+          values: ['us-east-1', 'us-east-2', 'eu-west-1'],
+        },
+      ],
+    });
+    return newMetric.save();
   }
 }

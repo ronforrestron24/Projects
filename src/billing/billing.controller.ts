@@ -1,12 +1,12 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { BillingService } from './billing.service';
+import { BillableMetricService } from './billing.service';
 
 @Controller('invoices')
 export class BillingController {
-  constructor(private readonly billingService: BillingService) {}
+  constructor(private readonly billableMetricService: BillableMetricService) {}
 
   @Post()
   async generateInvoice(@Body('customer_id') customerId: string) {
-    return this.billingService.checkAndInvoice(customerId);
+    return this.billableMetricService.createBillableMetric();
   }
 }

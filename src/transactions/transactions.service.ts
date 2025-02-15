@@ -6,7 +6,7 @@ import { Client } from 'lago-javascript-client';
 
 @Injectable()
 export class TransactionsService {
-  private lagoClient = new Lago({ apiKey: process.env.LAGO_API_KEY });
+  private lagoClient = Client(process.env.LAGO_API_KEY);
 
   constructor(
     @InjectModel(Transaction.name) private transactionModel: Model<Transaction>,
@@ -16,7 +16,7 @@ export class TransactionsService {
     const newTransaction = new this.transactionModel(transactionDto);
     await newTransaction.save();
 
-    return this.lagoClient.transactions.createTransaction({
+    return this.lagoClient.createTransaction({
       transaction: transactionDto,
     });
   }
