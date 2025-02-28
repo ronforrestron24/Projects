@@ -1,6 +1,7 @@
 export class CreateTaskDto {
   title: string;
   description: string;
+  date: Date;
 }
 
 //this is a data transfer object
